@@ -1,0 +1,288 @@
+﻿<html manifest="cache.appcache">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ascii" />
+    <title>Abfallkalender Stuttgart</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="CSS/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="JS/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="JS/bootstrap.min.js"></script>
+
+    <!--Auto-Adressvervollständigung-->
+    <script src="JS/places.min.js"></script>
+
+
+    <link rel="stylesheet" href="CSS/menu.css" />
+    <link rel="stylesheet" media="screen and (max-width: 740px)" href="CSS/phone.css" />
+    <link rel="stylesheet" media="screen and (min-width: 741px)" href="CSS/tablet.css" /> <!--media="only screen and (max-width:480px)">-->
+    <!--<meta name="viewport" content="user-scalable-no, width=device-width">-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <!--Aktivierung der mobilen Ansicht für iOS-->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="format-detection" content="telephone=no">
+
+    <!--Aktivierung der mobilen Ansicht für Android-->
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="manifest" href="manifest.json">
+
+
+
+
+    <!--
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js');
+        }
+    </script>
+        -->
+</head>
+
+
+
+<body>
+    <script>
+        var data;
+        window.onload = init;
+        //window.onload = getData;
+
+        function init() {
+            var startDate = new Date().toDateInputValue();
+            data = null;
+            console.log('Datum ' + startDate);
+            document.getElementById('iDateStart').value = startDate;//Default value for date picker
+            document.getElementById('iStreet').value = localStorage.getItem("street");
+
+        }
+
+        function getData() {
+            document.getElementById("loader").style.display = "block"; //Loading GIF
+
+            var street = document.getElementById('iStreet').value;
+            if (street.length > 6) {
+                var substr = street.substring(street.length - 6, street.length);
+                if ((substr == 'straße') || (substr == 'Straße')) {
+                    street = street.substring(0, street.length - 5) + 'tr.'; //Formatierung 
+                }
+
+            }
+            var streetNumber = 1; //document.getElementById('iStreet').value;
+
+            var startDate = new Date(document.getElementById('iDateStart').value);
+            var startDateString = startDate.toLocaleDateString('de-DE');
+
+            var range = document.getElementById('iRange').value;
+            if (range < 1) range = 1;
+
+            var endDate = new Date();
+            endDate.setDate(startDate.getDate() + 7*range);
+            var endDateString = endDate.toLocaleDateString('de-DE');
+
+            // Store
+            localStorage.setItem("street", street);
+
+            console.log('Straße: ' + street);
+            console.log('Range: ' + range);
+            console.log('StartDate: ' + startDateString);
+            console.log('EndDate: ' + endDateString);
+            var link = 'https://service.stuttgart.de/lhs-services/aws_kalender/api/?street=' + street + '&streetnr=' + streetNumber + '&datefrom=' + startDateString + '&dateto=' + endDateString + '&wastetypes[restmuell]=on&wastetypes[altpapier]=on&wastetypes[biomuell]=on';
+
+            //$.getJSON('https://service.stuttgart.de/lhs-services/aws_kalender/api/?street=Richard-Wagner-Str.&streetnr=15&datefrom=22.07.2017&dateto=22.08.2017&wastetypes[restmuell]=on&wastetypes[altpapier]=on&wastetypes[biomuell]=on', function (data) {
+
+            $.ajax({
+                url:        link,
+                dataType:   "json", // <== JSON-P request
+                success: function (data) {
+
+                    console.log(data);
+                    document.getElementById("date").innerHTML = '<span class="glyphicon glyphicon-calendar"></span> Zeitspanne: ' + startDateString + ' bis ' + endDateString;
+                    document.getElementById("street").innerHTML = '<span class="glyphicon glyphicon-home"></span> Straße: ' + data.SERVLET.DIALOG.LOCATION.STREETNAME + ' ' + data.SERVLET.DIALOG.LOCATION.STREETNR;
+
+
+                    //data is the JSON string
+                    var table = "<tr><th>Abholtermine</th></tr>";
+                    for (var i in data.SERVLET.DIALOG.SERVICELIST.SERVICE) {
+                        var obj = data.SERVLET.DIALOG.SERVICELIST.SERVICE[i];
+                        //console.log(obj.DATE + '; ' + obj.FRACTION + '; ' + obj.TURNUS + '; ' + obj.WEEKDAY);
+                        try {
+                            table += "<tr><td><div class=\"divZeit\"><div class=\"divZeitE\"><span class=\"glyphicon glyphicon-calendar\"></span><b> " + obj.DATE +
+
+                            "</b></div></div><div class=\"divThema\"><span class=\"glyphicon glyphicon-trash\"></span> " + obj.FRACTION.replace(/^\s\s*/, '').replace(/\s\s*$/, '') +
+
+                            "</div><div class=\"divKuV\"><div class=\"divKammer\"><span class=\"glyphicon glyphicon-refresh\"></span> " + obj.TURNUS +
+
+                            "</div><div class=\"divVerantwortung\"><span class=\"glyphicon glyphicon-bell\"></span> " + obj.WEEKDAY +
+                            "</div></td></tr>";
+                        } catch (e) {
+                            console.log(e);
+                        }
+                        document.getElementById("loader").style.display = "none";
+                        document.getElementById("demo").innerHTML = table;
+                    }
+                }
+
+            });
+
+        }
+
+
+        function myFunction(xml) {
+            var i;
+            try {
+
+                    table += "<tr><td><div class=\"divZeit\"><div class=\"divZeitE\"><span class=\"glyphicon glyphicon-play\"></span><b> " + start +
+
+                    "</b></div><div class=\"divZeitE\"><span class=\"glyphicon glyphicon-pause\"></span><b> " + ende +
+
+                    "</b></div></div><div class=\"divThema\"> " + thema.replace(/^\s\s*/, '').replace(/\s\s*$/, '') +
+
+                    "</div><div class=\"divKuV\"><div class=\"divKammer\"><span class=\"glyphicon glyphicon-th\"></span> " + kammer +
+
+                    "</div><div class=\"divVerantwortung\"><span class=\"glyphicon glyphicon-user\"></span> " + verantwortung +
+
+                    "</div></td></tr>";
+
+                document.getElementById("demo").innerHTML = table;
+            }
+            catch (e) {
+                // handle the unsavoriness if needed
+                console.log(e);
+            }
+        }
+
+        $(document).ready(function () {
+            $(".btn-default:first").click(function () {
+                $(this).button('toggle');
+            });
+        });
+
+        Date.prototype.toDateInputValue = (function () {
+            var local = new Date(this);
+            local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+            return local.toJSON().slice(0, 10);
+        });
+
+        function handleClick(ele) {
+            if (event.keyCode == 13) {
+                getData();
+                $('tableDiv').focus();
+            }
+        }
+
+    </script>
+
+    <!--************************************-->
+    <!--actual body content-->
+    <!--************************************-->
+
+    <div id="header">
+        <ul>
+            <li><span href="#home"><span style="cursor:pointer" class="glyphicon glyphicon-menu-hamburger" onclick="openNav()"></span></span></li>
+            <li><span href="#about">Abfallkalender Stuttgart</span></li>
+        </ul>
+        
+        
+    </div>
+    
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="#">Abholtermine</a>
+        <a href="#">Info</a>
+        <a href="#">Kontakt</a>
+        <a href="#">...</a>
+    </div>
+    <script>
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "250px";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+        }
+    </script>
+
+    <div class="container-fluid" id="content">
+
+
+        <p>Diese App dient ausschließlich Testzwecken.</p>
+        <p>Für die Inhalte wird keine redaktionelle Verantwortung übernommen - ebensowenig beansprucht die App Aktualität. Genauere Informationen können Sie hier einsehen:</p>
+        <br />
+        <!--Input-Felder-->
+        <div id="inputDiv">
+ 
+            <label for="iStreet" form="iStreet">Straße</label> <br />
+            <input id="iStreet" type="search" value="Richard-Wagner-Str." autocomplete="on" title="Bitte geben Sie Ihre Straße an" class="input" onkeydown="handleClick(this)" />
+            <!--Auto-Vervollständigung-->
+            <script>
+                    (function() {
+                        var placesAutocomplete = places({
+                            container: document.querySelector('#iStreet'),
+                            type: 'address',
+                            language: 'de',
+                            countries: 'de',
+                            style: true,
+                            templates: {
+                                value: function(suggestion) {
+                                    return suggestion.name;
+                                }
+                            }
+                        });
+                        placesAutocomplete.on('change', function resultSelected(e) {
+                            var str = e.suggestion.name;
+                            if (str.length > 6) {
+                                var substr = str.substring(str.length - 6, str.length);
+                                if ((substr == 'straße') || (substr == 'Straße')) {
+                                    str = str.substring(0, str.length - 5) + 'tr.'; //Formatierung 
+                                }
+                                
+                            }
+                            document.querySelector('#iStreet').value = str || '';
+                        });
+                    })();       
+            </script>
+
+            <br />
+            <label for="iDateStart" form="iDateStart">Start-Zeitpunkt</label> <br />
+            <input id="iDateStart" type="date" min="" autocomplete="off" class="input"/> 
+
+            <br />
+            <label for="iRange" form="iRange">Dauer [Wochen]</label> <br />
+            <input id="iRange" type="number" value="2" autocomplete="off" class="input" /> 
+        </div>
+        <br />
+        <button type="button" onclick="getData()" class="btn btn-basic">Aktualisieren</button>
+        <!--Output-Felder-->
+        <h5 id="date"><span class="glyphicon glyphicon-calendar"></span> Zeitspanne:</h5>
+        <h5 id="street"><span class="glyphicon glyphicon-home"></span> Straße:</h5>
+
+        <br />
+        <br />
+
+        <div id="loader" style="display:none;" >
+            <!--<img src="loading.gif" alt="Lade Inhalte...">-->
+        </div>
+
+        <div id ="tableDiv" onfocus="blur()" style="overflow-x:auto;">
+            <table id="demo"></table>
+        </div>
+            <br />
+            <br />
+
+            <button type="button" data-toggle="collapse" data-target="#btn_collapse" class="btn btn-default">Weitere Informationen</button>
+            <div id="btn_collapse" class="collapse">
+                <p>Lorem Ipsum .....</p>
+            </div>
+
+        <div class="footer">
+            <p><span class="glyphicon glyphicon-copyright-mark"></span> 2017</p>
+        </div>
+        </div>
+</body>
+</html>

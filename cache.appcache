@@ -1,0 +1,22 @@
+CACHE MANIFEST
+# v1 2017-08-03
+
+index.html
+offline.html
+menu.css
+phone.css
+tablet.css
+launcherIcon128.png
+https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css
+https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js
+https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js
+https://cdn.jsdelivr.net/places.js/1/places.min.js
+
+
+# Use from network if available
+NETWORK:
+
+
+# Fallback content
+FALLBACK:
+/ offline.html

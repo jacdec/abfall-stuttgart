@@ -1,0 +1,28 @@
+{
+  "short_name": "Abfallkalender Stuttgart",
+  "name": "Abfallkalender Stuttgart App",
+  "icons": [
+     {
+      "src": "launcherIcon96.png",
+      "sizes": "96x96"
+      //"type": "image/png"
+    },
+    {
+      "src": "launcherIcon128.png",
+      "sizes": "128x128"
+      //"type": "image/png"
+    },
+         {
+      "src": "launcherIcon192.png",
+      "sizes": "192x192"
+      //"type": "image/png"
+    }
+  ],
+  "start_url": "index.html",
+  "display": "standalone",
+  "orientation": "any",
+
+  "background_color": "#ffd800",
+  "theme_color": "#ffd800"
+
+}

@@ -1,0 +1,167 @@
+﻿@charset "utf-8";
+/* CSS Document */
+
+body, html {
+	background-color: #FFF;
+	color: #222;
+	font-family: Helvetica;
+	font-size: 14px;
+    padding-top:30px;
+}
+
+
+table, th, td {
+   white-space: pre; 
+}
+
+table {
+    width: 100%;
+}
+
+th {
+    height: 30px;
+    border-bottom:3px solid #0091DC;
+
+}
+
+td {
+    vertical-align: text-top;
+    border-bottom: 1px solid #8d8d8d;
+}
+
+
+#btn1 {
+	margin: 5px;
+	padding: 5px;
+    width:inherit;
+}
+
+
+#header {
+    position: fixed;
+    top: 0;
+    display:inline-block;
+    vertical-align: top;
+    width:100vw;
+    background-color: #808080;
+    font-size: 20px;
+	font-weight: bold;
+    color: black;
+	padding: 10px 0;
+    border-bottom: 2px solid #0091DC;
+    fill-opacity: 1;
+    opacity: 1;
+    z-index: 1;
+}
+
+#header ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    opacity: 1;
+}
+
+#header li {
+    display: inline;
+    opacity: 1;
+}
+
+#header li:last-child {
+    display: inline;
+    float: right;
+    text-align:center;
+    padding-right: 20px;
+    width: 92vw;
+
+}
+
+
+
+.footer {
+    position: relative;
+    bottom: 0;
+    text-align: center;
+    font-size: 12px;
+    color: darkgrey;
+    clear: both;
+    padding-top: 20px;
+}
+
+img, embed, object, video {
+  max-width: 100%;
+}
+
+
+.divDauer {
+    float: left;
+    min-width: 80px;
+
+}
+
+.divKammer {
+    float: left;
+    min-width: 200px;
+
+}
+
+.divVerantwortung {
+    float: left;
+    min-width: 100px;
+
+}
+
+.divKuV {
+    float: left;
+    min-width: 200px;
+    padding-bottom: 10px;
+    word-wrap:break-word;
+    white-space:pre-line;
+    clear: left;
+}
+
+
+
+.divThema {
+    float: left;
+    min-width: 85vw;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    word-wrap:break-word;
+    white-space:pre-line;
+     font-weight: bold;
+}
+.divThema::first-line {
+   
+}
+
+.contact {
+    float: left;
+    width: 25vw;
+    height: 25vw;
+    min-width: 90px;
+    min-height: 90px;
+    max-width: 150px;
+    max-height: 150px;
+    background-repeat:no-repeat; 
+    background-size:cover;
+    background-image: url("images(person.png");
+    text-align: center;
+    position: relative;
+    color: white;
+    font-weight: bold;
+    margin: 8px;
+}
+
+.contact:hover {
+    border: 2px solid rgb(0,145,220);
+}
+
+.contact p {
+    text-align: left;
+    position: absolute;
+    left: 3px;
+    margin-left: 3px;
+    margin-right: 3px;
+    bottom:5px;
+
+}
